@@ -3,25 +3,61 @@ document.addEventListener('DOMContentLoaded', function(event) {
     el: '#app',
     data: {
       tasks: [
-              'Take out the papers',
-              'Take out the trash',
-              'Spend some spending cash'
+              {
+                text: 'Take out the papers',
+                priority: "9",
+                completed: false
+              },
+              {
+                text: 'Take out the trash',
+                priority: "2",
+                completed: false
+              },
+              {
+                text: 'Spend some spending cash',
+                priority: "10",
+                completed: false
+              }
               ],
-      newTask: ""
+      newTaskText: "",
+      newTaskPriority: ""
     },
     mounted: function() {
 
     },
     methods: {
       addTask: function() {
-        if (this.newTask) {
-          this.tasks.push(this.newTask);
-          this.newTask = "";
+        if (this.newTaskText && this.newTaskPriority) {
+          var newTask = {
+                          text: this.newTaskText,
+                          priority: this.newTaskPriority,
+                          completed: false
+                        };
+          this.tasks.push(newTask);
+          this.newTaskText = "";
+          this.newTaskPriority = "";
         }
       },
       completeTask: function(inputTask) {
-        var index = this.tasks.indexOf(inputTask);
-        this.tasks.splice(index,1);
+        inputTask.completed = !inputTask.completed;
+      },
+      numberOfIncompleteTasks: function() {
+        let count = 0;
+        for(let task of this.tasks) {
+          if (!task.completed) {
+            count++;
+          }
+        }
+        return count;
+      },
+      removeCompletedTasks: function() {
+        let incompleteTasks = [];
+        for(let task of this.tasks) {
+          if (!task.completed) {
+            incompleteTasks.push(task);
+          }
+        }
+        this.tasks = incompleteTasks;
       }
     },
     computed: {
@@ -29,3 +65,5 @@ document.addEventListener('DOMContentLoaded', function(event) {
     }
   });
 });
+
+
